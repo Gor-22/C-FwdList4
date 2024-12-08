@@ -30,7 +30,6 @@ private:
     void clean();
 };
 
-// Конструктор по умолчанию
 template<class T>
 ForwardList<T>::ForwardList(std::size_t size) : size(size) {
     Node** current = &head;
@@ -40,7 +39,6 @@ ForwardList<T>::ForwardList(std::size_t size) : size(size) {
     }
 }
 
-// Параметрический конструктор
 template<class T>
 ForwardList<T>::ForwardList(std::size_t size, T filler) : size(size) {
     Node** current = &head;
@@ -50,8 +48,6 @@ ForwardList<T>::ForwardList(std::size_t size, T filler) : size(size) {
         current = &((*current)->next);
     }
 }
-
-// Параметрический конструктор с константным параметром
 template<class T>
 ForwardList<T>::ForwardList(std::size_t size, const T& filler) : size(size) {
     Node** current = &head;
@@ -62,19 +58,15 @@ ForwardList<T>::ForwardList(std::size_t size, const T& filler) : size(size) {
     }
 }
 
-// Метод для проверки пустоты списка
 template<class T>
 bool ForwardList<T>::empty() {
     return size == 0;
 }
-
-// Метод для доступа к первому элементу
 template<class T>
 T& ForwardList<T>::front() {
     return head->value;
 }
 
-// Метод для добавления элемента в начало списка
 template<class T>
 void ForwardList<T>::push_front(T value) {
     Node* newNode = new Node();
@@ -83,16 +75,12 @@ void ForwardList<T>::push_front(T value) {
     head = newNode;
     size++;
 }
-
-// Метод для добавления элемента в начало списка с константным параметром
 template<class T>
 void ForwardList<T>::push_front(const T& value) {
     Node* newNode = new Node(value, head);
     head = newNode;
     size++;
 }
-
-// Метод для удаления первого элемента
 template<class T>
 void ForwardList<T>::pop_front() {
     if (head == nullptr) {
@@ -103,8 +91,6 @@ void ForwardList<T>::pop_front() {
     delete temp;
     size--;
 }
-
-// Метод для очистки списка
 template<class T>
 void ForwardList<T>::clean() {
     Node* current = head;
@@ -116,7 +102,6 @@ void ForwardList<T>::clean() {
     head = nullptr;
 }
 
-// Деструктор
 template<class T>
 ForwardList<T>::~ForwardList() noexcept {
     clean();
