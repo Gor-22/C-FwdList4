@@ -1,0 +1,46 @@
+#pragma once
+#include "../ForwardList.h"
+#include "Fixtures/CustomAsserts.h"
+
+namespace test {
+
+  struct TestClassForDestructor {
+    std::size_t* destructorCallCounterPtr;
+
+    TestClassForDestructor() : destructorCallCounterPtr(nullptr) {}
+
+    TestClassForDestructor(std::size_t* destructorCallCounterPtr)
+      : destructorCallCounterPtr(destructorCallCounterPtr) {}
+
+    ~TestClassForDestructor() {
+      if (destructorCallCounterPtr)
+        ++(*destructorCallCounterPtr);
+    }
+  };
+
+  struct DestructorCallTest {
+    DestructorCallTest() {
+      std::size_t destructorCallCounter = 0;
+      TestClassForDestructor destructorTestClassObj(&destructorCallCounter);
+
+      // Код между скобками для вызова деструктора ForwardList
+      {
+        ForwardList<TestClassForDestructor> lst(10, destructorTestClassObj);
+        for (std::size_t i = 0; i < 20; ++i)
+          lst.push_front(destructorTestClassObj);
+      }
+      assertEqual(destructorCallCounter, 30, __LINE__, __FILE__);
+
+      destructorCallCounter = 0;
+      {
+        ForwardList<TestClassForDestructor> lst(10, destructorTestClassObj);
+        for (std::size_t i = 0; i < 5; ++i)
+          lst.pop_front();
+        assertEqual(destructorCallCounter, 5, __LINE__, __FILE__);
+      }
+      assertEqual(destructorCallCounter, 10, __LINE__, __FILE__);
+    }
+  };
+
+  static DestructorCallTest destructorCallTest;
+}
